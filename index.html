@@ -1,0 +1,325 @@
+<meta charset="utf-8">
+<title>店舗せどり⇨Amazonで月利463万までの道</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@700;900&display=swap">
+<style>
+/* ===== kaiin_site: 会員サイト(単一HTML) デザイントークン ===== */
+:root{
+  --bg:#f3f5f8;--surface:#ffffff;--surface-2:#eef2f7;--ink:#1a2130;--ink-2:#3f4a5a;--muted:#77808f;--line:#e2e7ee;
+  --primary:#1f4e8c;--primary-hover:#173e70;--primary-ink:#ffffff;--primary-soft:#e6eef9;
+  --accent:#e9a23b;--accent-soft:#fff3df;--ok:#1f9d61;--ok-soft:#e4f5ec;
+  --appbar:#111a2b;--appbar-ink:#ffffff;--img-bg:#e9edf3;--shadow:0 1px 2px rgba(16,24,40,.06),0 6px 18px -8px rgba(16,24,40,.18);
+  --font-body:"Noto Sans JP","Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI",Meiryo,system-ui,sans-serif;
+  --font-head:"Zen Kaku Gothic New","Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic UI",Meiryo,system-ui,sans-serif;
+  --radius:14px;--radius-sm:10px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f141c;--surface:#171e2a;--surface-2:#1f2836;--ink:#e9eef5;--ink-2:#c5cdd8;--muted:#8d97a7;--line:#2a3443;
+    --primary:#7fb3ff;--primary-hover:#9cc5ff;--primary-ink:#0b1424;--primary-soft:#1c2c47;
+    --accent:#f0b35a;--accent-soft:#3a2c14;--ok:#4fca8c;--ok-soft:#153426;
+    --appbar:#0a0f17;--appbar-ink:#f2f5f9;--img-bg:#222b38;--shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -10px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f141c;--surface:#171e2a;--surface-2:#1f2836;--ink:#e9eef5;--ink-2:#c5cdd8;--muted:#8d97a7;--line:#2a3443;
+  --primary:#7fb3ff;--primary-hover:#9cc5ff;--primary-ink:#0b1424;--primary-soft:#1c2c47;
+  --accent:#f0b35a;--accent-soft:#3a2c14;--ok:#4fca8c;--ok-soft:#153426;
+  --appbar:#0a0f17;--appbar-ink:#f2f5f9;--img-bg:#222b38;--shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -10px rgba(0,0,0,.6);
+}
+*,*::before,*::after{box-sizing:border-box}
+/* 埋め込み表示(iframe)対策: 内側のスクロールが外側ページへ伝播するとスマホのURLバーが動き、
+   外側に白い余白が出る。overscroll-behavior で伝播を止め、html にも背景色を敷く */
+html{-webkit-text-size-adjust:100%;background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased}
+/* 通常の文書フロー。100vh/100%/overflow:hidden/position:fixed で全画面を確保する作りは
+   スマホChromeのツールバー伸縮と干渉して下部に空白が出るため一切使わない */
+#scroller{display:block;background:var(--bg)}
+a{color:var(--primary);text-decoration:none}
+a:hover{text-decoration:underline}
+img{max-width:100%;height:auto;display:block}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+.bi{display:inline-block;fill:currentColor;width:1em;height:1em;vertical-align:-.15em;flex:none}
+[hidden]{display:none!important}
+.wrap{width:100%;max-width:780px;margin:0 auto;padding:0 18px}
+@media (min-width:640px){.wrap{padding:0 28px}body{font-size:17px}}
+
+/* ---- アプリバー ---- */
+.appbar{position:sticky;top:0;z-index:50;background:var(--appbar);color:var(--appbar-ink);box-shadow:0 1px 0 rgba(255,255,255,.06)}
+.appbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px}
+.brand{color:var(--appbar-ink);font-family:var(--font-head);font-weight:700;font-size:15px;letter-spacing:.01em;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:10px}
+.brand:hover{text-decoration:none;opacity:.9}
+.appbar-back{flex:none;display:inline-flex;align-items:center;gap:6px;color:var(--appbar-ink);background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:6px 12px 6px 10px;font-size:13px;font-weight:700;white-space:nowrap}
+.appbar-back:hover{background:rgba(255,255,255,.2);text-decoration:none}
+
+
+/* ---- 本体 ---- */
+main{display:block;padding-bottom:48px}
+.page{animation:rise .35s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.page{animation:none}.lesson-card,.btn{transition:none}}
+.eyebrow{margin:0 0 6px;color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+h1,h2,h3{font-family:var(--font-head);line-height:1.35;margin:0;text-wrap:balance;letter-spacing:.005em}
+h1{font-size:clamp(1.35rem,1.05rem + 1.4vw,1.9rem);font-weight:900}
+h2{font-size:1.1rem;font-weight:700}
+
+/* ---- コース(一覧)ページ ---- */
+.hero{padding:36px 0 22px}
+.hero .lead{margin:12px 0 0;color:var(--ink-2);font-size:.98em}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.chip.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent;font-weight:700}
+.progress-line{height:6px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin-top:14px}
+.progress-line>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#f6c97a);border-radius:999px;transition:width .6s ease}
+.group{margin:8px 0 26px}
+.group-title{display:flex;align-items:center;gap:10px;margin:0 0 12px;color:var(--ink-2)}
+.group-title::after{content:"";flex:1;height:1px;background:var(--line)}
+.lesson-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.lesson-card{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 16px 16px 14px;color:var(--ink);box-shadow:var(--shadow);transition:transform .15s,border-color .15s}
+.lesson-card:hover{text-decoration:none;transform:translateY(-2px);border-color:var(--primary)}
+.lesson-card .num{font-family:var(--font-head);font-weight:900;font-size:1.35rem;line-height:1;color:var(--primary);font-variant-numeric:tabular-nums;min-width:2.1ch;text-align:center}
+.lesson-card .ttl{font-weight:700;line-height:1.55;font-size:.98em}
+.lesson-card .sub{display:flex;gap:8px;align-items:center;margin-top:6px;font-size:12.5px;color:var(--muted);font-weight:500}
+.lesson-card .sub .done{color:var(--ok);display:inline-flex;align-items:center;gap:4px}
+.lesson-card .go{flex:none;display:inline-flex;align-items:center;gap:6px;background:var(--primary-soft);color:var(--primary);font-weight:700;font-size:13px;padding:8px 12px;border-radius:999px;white-space:nowrap}
+.lesson-card:hover .go{background:var(--primary);color:var(--primary-ink)}
+@media (max-width:480px){.lesson-card{grid-template-columns:auto 1fr}.lesson-card .go{grid-column:2;justify-self:start}}
+.other-courses{margin-top:34px}
+.other-courses ul{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:8px}
+.other-courses a{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px;color:var(--ink);font-weight:700}
+
+/* ---- 記事ページ ---- */
+.lesson-head{padding:28px 0 8px}
+.lesson-head .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.content{margin-top:18px;line-height:1.95;overflow-wrap:anywhere}
+.content p{margin:0 0 1.1em}
+.content h2,.content h3,.content h4,.content h5{margin:1.6em 0 .6em;line-height:1.4}
+.content h2{font-size:1.25em}.content h3,.content h4{font-size:1.12em}.content h5{font-size:1.02em}
+.content ul,.content ol{margin:0 0 1.1em;padding-left:1.5em}
+.content blockquote{margin:0 0 1.1em;padding:12px 16px;border-left:4px solid var(--accent);background:var(--surface);border-radius:0 var(--radius-sm) var(--radius-sm) 0}
+.content hr{border:0;height:1px;background:var(--line);margin:1.6em 0}
+.content table{border-collapse:collapse;width:100%;margin:0 0 1.1em;font-size:.95em}
+.content td,.content th{border:1px solid var(--line);padding:.5em .7em}
+.content th{background:var(--surface-2)}
+.content img{background:var(--img-bg)}
+.content figure,.content .image{margin:1.4em auto;max-width:100%}
+.content figure img,.content .image img{margin:0 auto;border-radius:var(--radius);box-shadow:var(--shadow)}
+.content figcaption{margin-top:8px;text-align:center;color:var(--muted);font-size:.85em}
+.content .seq{margin:1.4em auto;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);background:var(--img-bg)}
+.content .seq img{width:100%}
+.content .marker-yellow{background:#fff1a8;color:#1a2130}.content .marker-green{background:#c9f5c9;color:#1a2130}.content .marker-pink{background:#ffd3de;color:#1a2130}.content .marker-blue{background:#cfeafe;color:#1a2130}
+.content .pen-red{color:#d93025}.content .pen-green{color:#188038}
+.content .text-big{font-size:1.4em}.content .text-huge{font-size:1.8em}.content .text-small{font-size:.85em}.content .text-tiny{font-size:.7em}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--primary);color:var(--primary-ink);font-weight:700;padding:14px 26px;border-radius:999px;border:0;box-shadow:var(--shadow);transition:transform .15s,background .15s}
+.btn:hover{background:var(--primary-hover);color:var(--primary-ink);text-decoration:none;transform:translateY(-1px)}
+.btn.ghost{background:var(--surface);color:var(--primary);border:1.5px solid var(--primary)}
+.btn.ghost:hover{background:var(--primary-soft)}
+.btn-row{display:flex;justify-content:center;margin:1.4em 0}
+.video-card{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin:1.4em 0;color:var(--ink);box-shadow:var(--shadow)}
+.video-card:hover{text-decoration:none;border-color:var(--primary)}
+.video-card .play{flex:none;width:44px;height:44px;border-radius:50%;background:var(--primary);color:var(--primary-ink);display:flex;align-items:center;justify-content:center;font-size:20px}
+.video-card strong{display:block;line-height:1.4}
+.video-card small{display:block;color:var(--muted);font-size:12.5px;overflow-wrap:anywhere}
+.video-embed{position:relative;width:100%;padding-top:56.25%;margin:1.4em 0;background:#000;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.done-box{margin:36px 0 8px;padding:22px 18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.done-state{display:inline-flex;align-items:center;gap:8px;color:var(--ok);font-weight:700;font-size:1.05em}
+.done-state .bi{background:var(--ok-soft);border-radius:50%;padding:4px;width:1.6em;height:1.6em}
+.btn.big{width:100%;max-width:420px;padding:16px 24px;font-size:1.05em}
+.btn.small{padding:8px 16px;font-size:13px;box-shadow:none}
+.pager{display:grid;gap:12px;margin:24px 0 18px}
+@media (min-width:560px){.pager{grid-template-columns:1fr 1fr}}
+.pager-card{display:block;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;color:var(--ink);box-shadow:var(--shadow);min-width:0}
+.pager-card:hover{text-decoration:none;border-color:var(--primary)}
+.pager-card small{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.08em}
+.pager-card strong{display:block;margin-top:4px;font-size:.95em;line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.pager-card.next{text-align:right}.pager-card.next small{justify-content:flex-end}
+.pager-card.disabled{opacity:.45;pointer-events:none}
+.end-actions{display:flex;justify-content:center;margin-top:8px}
+
+/* ---- Home(コース一覧) ---- */
+.home-hero{padding:40px 0 10px;text-align:center}
+.home-hero h1{font-size:clamp(1.4rem,1rem + 2vw,2.1rem)}
+.tools{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin:22px 0 16px}
+.tools select,.tools input{font:inherit;font-size:14px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+.tools input{flex:1;min-width:160px}
+.course-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.course-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;position:relative;transition:transform .15s}
+.course-card:hover{transform:translateY(-2px)}
+.course-card .thumb{aspect-ratio:16/9;background:var(--img-bg);object-fit:cover;width:100%}
+.course-card .body{padding:16px 16px 18px;display:flex;flex-direction:column;gap:10px}
+.course-card h2{font-size:1.05rem}
+.course-card .body .btn{margin-top:auto;align-self:flex-start;padding:10px 18px;font-size:14px}
+.course-card .btn::after{content:"";position:absolute;inset:0}
+.empty{color:var(--muted);text-align:center;padding:40px 0}
+
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:13px;padding:22px 0;background:var(--bg)}
+footer .wrap{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+</style>
+
+<div id="scroller">
+<header class="appbar"><div class="wrap">
+  <a class="brand" href="#/"><span id="brand"></span></a>
+  <a class="appbar-back" id="appbar-back" href="#/" hidden><svg width="1em" height="1em" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/></svg> 一覧</a>
+</div></header>
+<main id="view"></main>
+<footer><div class="wrap"><span id="footer-text"></span></div></footer>
+</div>
+
+<script type="application/json" id="site-data">{"site_name":"店舗せどり⇨Amazonで月利463万までの道","hero_title":"消防士⇨店舗せどりで月利30万⇨Amazon物販で月利463万までの道のり","footer":"© 店舗せどり⇨Amazonで月利463万までの道","show_home":false,"courses":[{"id":"main","title":"無料プレゼント","category":"","sections":[{"title":"無料特典","lessons":[{"id":"L26090301","title":"【1】動画10本超え「Amazon物販で月利500万超え師匠のコンテンツサイト」","blocks":[{"type":"text","text":"この特典は準備中です。公開までもう少しお待ちください。"}]},{"id":"L26090302","title":"【マンガ】月利30万から1年で月利463万、家族との時間を取り戻した物語","blocks":[{"type":"text","text":"この特典は準備中です。公開までもう少しお待ちください。"}]}]}]}]}</script>
+<script type="application/json" id="img-data">{}</script>
+<script>
+(function(){
+  var SITE=JSON.parse(document.getElementById('site-data').textContent);
+  var IMG=JSON.parse(document.getElementById('img-data').textContent);
+  var ICON={arrowLeft:'<svg width="1em" height="1em" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/></svg>',arrowRight:'<svg width="1em" height="1em" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/></svg>',chevL:'<svg width="1em" height="1em" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/></svg>',chevR:'<svg width="1em" height="1em" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg>',play:'<svg width="1em" height="1em" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/></svg>',check:'<svg width="1em" height="1em" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi" viewBox="0 0 16 16"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg>',list:'<svg width="1em" height="1em" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/></svg>',house:'<svg width="1em" height="1em" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi" viewBox="0 0 16 16"><path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/></svg>'};
+  var KEY='kaiin_site:'+SITE.site_name;
+  var SHOW_HOME=SITE.show_home!==false;      // false: Homeを省き最初のコースから始める
+  var $=function(s,r){return (r||document).querySelector(s)};
+  var view=$('#view'),appBack=$('#appbar-back');
+
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+  function pad(n){return (n<10?'0':'')+n}
+  function visited(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return []}}
+  function markVisited(id){try{var v=visited();if(v.indexOf(id)<0){v.push(id);localStorage.setItem(KEY,JSON.stringify(v))}}catch(e){}}
+  function unmarkVisited(id){try{localStorage.setItem(KEY,JSON.stringify(visited().filter(function(x){return x!==id})))}catch(e){}}
+  function lessonsOf(c){var a=[];(c.sections||[]).forEach(function(s){(s.lessons||[]).forEach(function(l){a.push({lesson:l,section:s})})});return a}
+  function findCourse(id){return (SITE.courses||[]).filter(function(c){return c.id===id})[0]}
+  function courseHref(c){return (!SHOW_HOME&&SITE.courses[0]===c)?'#/':'#/course/'+encodeURIComponent(c.id)}
+  function lessonHref(c,l){return '#/course/'+encodeURIComponent(c.id)+'/lesson/'+encodeURIComponent(l.id)}
+  function imgTag(key,alt){var i=IMG[key];if(!i)return '<p class="empty">[画像が見つかりません: '+esc(key)+']</p>';return '<img src="'+i.data+'" width="'+i.w+'" height="'+i.h+'" loading="lazy" decoding="async" alt="'+esc(alt||'')+'">'}
+  function videoUrl(u){
+    var m=u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/))([\w-]{6,})/);
+    if(m)return 'https://www.youtube.com/embed/'+m[1];
+    m=u.match(/vimeo\.com\/(?:video\/)?(\d+)/);if(m)return 'https://player.vimeo.com/video/'+m[1];
+    return u;
+  }
+  function renderBlocks(blocks){
+    return (blocks||[]).map(function(b){
+      switch(b.type){
+        case 'text':return String(b.text||'').split(/\n{2,}/).map(function(p){return '<p>'+esc(p).replace(/\n/g,'<br>')+'</p>'}).join('');
+        case 'heading':return '<h2>'+esc(b.text)+'</h2>';
+        case 'html':return b.html||'';
+        case 'image':return '<figure>'+imgTag(b.src,b.alt)+(b.caption?'<figcaption>'+esc(b.caption)+'</figcaption>':'')+'</figure>';
+        case 'images':return '<div class="seq" style="max-width:'+(parseInt(b.max_width,10)||760)+'px">'+(b.src||[]).map(function(s,i){return imgTag(s,(b.alt||'')+' '+(i+1))}).join('')+'</div>';
+        case 'button':return '<div class="btn-row"><a class="btn" href="'+esc(b.url)+'" target="_blank" rel="noopener">'+esc(b.label||'こちらをクリック')+' '+ICON.arrowRight+'</a></div>';
+        case 'video':
+          if(b.embed)return '<div class="video-embed"><iframe src="'+esc(videoUrl(b.url))+'" title="'+esc(b.title||'動画')+'" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><p style="text-align:center"><a href="'+esc(b.url)+'" target="_blank" rel="noopener">動画が表示されない場合はこちら</a></p>';
+          return '<a class="video-card" href="'+esc(b.url)+'" target="_blank" rel="noopener"><span class="play">'+ICON.play+'</span><span><strong>'+esc(b.title||'動画を見る')+'</strong><small>'+esc(b.url)+'</small></span></a>';
+        default:return '';
+      }
+    }).join('');
+  }
+
+  function route(){
+    var h=location.hash.replace(/^#\/?/,'')||'';
+    var parts=h.split('/').map(function(p){try{return decodeURIComponent(p)}catch(e){return p}});
+    appBack.hidden=true;
+    if(parts[0]==='course'&&parts[1]){
+      var c=findCourse(parts[1]);
+      if(!c){location.hash='#/';return}
+      if(parts[2]==='lesson'&&parts[3])renderLesson(c,parts[3]);else renderCourse(c);
+    }else if(SHOW_HOME||!(SITE.courses||[]).length)renderHome();
+    else renderCourse(SITE.courses[0]);
+    window.scrollTo(0,0);
+  }
+
+  function renderHome(){
+    document.title=SITE.site_name;
+    var v=visited();
+    var cats=[];(SITE.courses||[]).forEach(function(c){(c.category||'').split(',').map(function(s){return s.trim()}).filter(Boolean).forEach(function(k){if(cats.indexOf(k)<0)cats.push(k)})});
+    var cards=(SITE.courses||[]).map(function(c){
+      var ls=lessonsOf(c),done=ls.filter(function(x){return v.indexOf(c.id+'/'+x.lesson.id)>=0}).length,pct=ls.length?Math.round(done/ls.length*100):0;
+      var im=c.image&&IMG[c.image]?'<img class="thumb" src="'+IMG[c.image].data+'" alt="">':'<div class="thumb"></div>';
+      return '<div class="course-card" data-name="'+esc(c.title)+'" data-cats="'+esc(c.category||'')+'">'+im+'<div class="body"><h2>'+esc(c.title)+'</h2>'+
+        '<div class="progress-line" role="progressbar" aria-label="受講進捗" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'"><i style="width:'+pct+'%"></i></div>'+
+        '<span class="chip">'+ls.length+'本 · 受講済み '+done+'</span><a class="btn" href="'+courseHref(c)+'">受講する '+ICON.arrowRight+'</a></div></div>';
+    }).join('');
+    view.innerHTML='<div class="page"><div class="wrap">'+
+      '<section class="home-hero"><p class="eyebrow">コンテンツ</p><h1>'+esc(SITE.hero_title||SITE.site_name)+'</h1></section>'+
+      '<div class="tools"><select id="cat" aria-label="カテゴリ"><option value="">すべてのカテゴリ</option>'+cats.map(function(k){return '<option value="'+esc(k)+'">'+esc(k)+'</option>'}).join('')+'</select><input id="q" type="search" placeholder="コースを検索" aria-label="コース検索"></div>'+
+      '<div class="course-grid" id="grid">'+(cards||'<div class="empty">コースはまだありません</div>')+'</div></div></div>';
+    var q=$('#q'),cat=$('#cat');
+    var filter=function(){var s=q.value.trim(),k=cat.value;view.querySelectorAll('.course-card').forEach(function(el){var okQ=s===''||el.getAttribute('data-name').indexOf(s)>=0;var okK=k===''||el.getAttribute('data-cats').split(',').map(function(x){return x.trim()}).indexOf(k)>=0;el.hidden=!(okQ&&okK)})};
+    q.addEventListener('input',filter);cat.addEventListener('change',filter);
+  }
+
+  function renderCourse(c){
+    document.title=c.title+' | '+SITE.site_name;
+    if(SHOW_HOME){appBack.hidden=false;appBack.href='#/';appBack.innerHTML=ICON.house+' Home'}
+    var v=visited(),all=lessonsOf(c),done=all.filter(function(x){return v.indexOf(c.id+'/'+x.lesson.id)>=0}).length,pct=all.length?Math.round(done/all.length*100):0;
+    var n=0;
+    var groups=(c.sections||[]).map(function(s){
+      var items=(s.lessons||[]).map(function(l){n++;var isDone=v.indexOf(c.id+'/'+l.id)>=0;
+        return '<li><a class="lesson-card" href="'+lessonHref(c,l)+'"><span class="num">'+pad(n)+'</span><span><span class="ttl">'+esc(l.title)+'</span><span class="sub">'+(isDone?'<span class="done">'+ICON.check+' 受講済み</span>':'<span>未受講</span>')+'</span></span><span class="go">'+(isDone?'もう一度見る':'受講する')+' '+ICON.chevR+'</span></a></li>'}).join('');
+      return '<section class="group"><h2 class="group-title">'+esc(s.title)+'</h2><ol class="lesson-list">'+(items||'<li class="empty">コンテンツはまだありません</li>')+'</ol></section>';
+    }).join('');
+    var others=(SITE.courses||[]).filter(function(x){return x!==c});
+    view.innerHTML='<div class="page"><div class="wrap">'+
+      '<section class="hero"><p class="eyebrow">'+esc(c.category||'コンテンツ一覧')+'</p><h1>'+esc(c.title)+'</h1>'+(c.lead||(!SHOW_HOME&&SITE.hero_title)?'<p class="lead">'+esc(c.lead||SITE.hero_title)+'</p>':'')+
+      '<div class="hero-meta"><span class="chip">全 '+all.length+' 本</span><span class="chip'+(done&&done===all.length?' ok':'')+'">'+(done===all.length&&all.length?ICON.check+' すべて受講済み':'受講済み '+done+' / '+all.length)+'</span></div>'+
+      '<div class="progress-line" role="progressbar" aria-label="受講進捗" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'"><i style="width:'+pct+'%"></i></div></section>'+
+      (groups||'<div class="empty">コンテンツはまだありません</div>')+
+      (others.length&&!SHOW_HOME?'<section class="other-courses"><h2 class="group-title">他のコース</h2><ul>'+others.map(function(x){return '<li><a href="'+courseHref(x)+'">'+esc(x.title)+' '+ICON.chevR+'</a></li>'}).join('')+'</ul></section>':'')+
+      '</div></div>';
+  }
+
+  function renderLesson(c,lid){
+    var all=lessonsOf(c),idx=-1;
+    all.forEach(function(x,i){if(x.lesson.id===lid)idx=i});
+    if(idx<0){location.hash=courseHref(c);return}
+    var L=all[idx].lesson,S=all[idx].section,prev=all[idx-1],next=all[idx+1];
+    document.title=L.title+' | '+SITE.site_name;
+    appBack.hidden=false;appBack.href=courseHref(c);appBack.innerHTML=ICON.list+' 一覧';
+    var pcard=function(x,cls,label,icon){
+      if(!x)return '<span class="pager-card '+cls+' disabled"><small>'+(cls==='prev'?icon+' '+label:label+' '+icon)+'</small><strong>—</strong></span>';
+      return '<a class="pager-card '+cls+'" href="'+lessonHref(c,x.lesson)+'"><small>'+(cls==='prev'?icon+' '+label:label+' '+icon)+'</small><strong>'+esc(x.lesson.title)+'</strong></a>';
+    };
+    view.innerHTML=
+      '<div class="page"><div class="wrap"><article>'+
+      '<header class="lesson-head"><p class="eyebrow">'+esc(S.title)+'</p><h1>'+esc(L.title)+'</h1></header>'+
+      '<div class="content">'+renderBlocks(L.blocks)+'</div>'+
+      '<div class="done-box" id="done-box"></div>'+
+      '<nav class="pager" aria-label="前後のコンテンツ">'+pcard(prev,'prev','前のコンテンツ',ICON.chevL)+pcard(next,'next','次のコンテンツ',ICON.chevR)+'</nav>'+
+      '<div class="end-actions"><a class="btn ghost" href="'+courseHref(c)+'">'+ICON.list+' コンテンツ一覧に戻る</a></div>'+
+      '</article></div></div>';
+    var key=c.id+'/'+lid,box=$('#done-box');
+    var paint=function(){
+      var d=visited().indexOf(key)>=0;
+      box.innerHTML=d
+        ?'<div class="done-state">'+ICON.check+' このコンテンツは受講済みです</div><button type="button" class="btn ghost small" id="done-btn">受講済みを取り消す</button>'
+        :'<button type="button" class="btn big" id="done-btn">'+ICON.check+' 受講済みにする</button>';
+      $('#done-btn').addEventListener('click',function(){d?unmarkVisited(key):markVisited(key);paint()});
+    };
+    paint();
+  }
+
+  $('#brand').textContent=SITE.site_name;
+  $('#footer-text').textContent=SITE.footer||('© '+SITE.site_name);
+  window.addEventListener('hashchange',route);
+  route();
+
+  // ?debug を付けて開くと表示環境の数値を画面左上に出す（表示崩れの調査用）
+  if(/debug/.test(location.search)){
+    var sc=document.getElementById('scroller');
+    document.documentElement.style.background='#ff00ff';
+    sc.style.outline='4px solid red';sc.style.outlineOffset='-4px';
+    var d=document.createElement('div');
+    d.style.cssText='position:fixed;left:0;top:64px;z-index:9999;background:rgba(0,0,0,.85);color:#0f0;font:12px/1.4 monospace;padding:6px 8px;white-space:pre;pointer-events:none;max-width:95vw;overflow:hidden';
+    document.body.appendChild(d);
+    var upd=function(){var vv=window.visualViewport;var r=sc.getBoundingClientRect();
+      d.textContent='inner '+innerWidth+'x'+innerHeight+'  outer '+outerWidth+'x'+outerHeight+'\n'+
+        'visualViewport '+(vv?Math.round(vv.width)+'x'+Math.round(vv.height)+' offsetTop='+Math.round(vv.offsetTop)+' scale='+vv.scale.toFixed(2):'none')+'\n'+
+        'screen '+screen.width+'x'+screen.height+' avail '+screen.availHeight+' dpr='+devicePixelRatio+'\n'+
+        'html client/scroll '+document.documentElement.clientHeight+'/'+document.documentElement.scrollHeight+' scrollY='+Math.round(scrollY)+'\n'+
+        'scroller rect top='+Math.round(r.top)+' bottom='+Math.round(r.bottom)+' h='+Math.round(r.height)+'\n'+
+        'scroller client/scroll '+sc.clientHeight+'/'+sc.scrollHeight+' scrollTop='+Math.round(sc.scrollTop)+'\n'+
+        'UA '+navigator.userAgent.replace(/Mozilla\/5\.0 /,'').slice(0,90);};
+    upd();addEventListener('resize',upd);addEventListener('scroll',upd);
+    if(window.visualViewport){visualViewport.addEventListener('resize',upd);visualViewport.addEventListener('scroll',upd)}
+    setInterval(upd,1000);
+  }
+})();
+</script>
