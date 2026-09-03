@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amazon出品規制解除ナビ</title>
+<style>
+  :root{
+    --navy:#131A22;
+    --navy2:#232F3E;
+    --orange:#FF9900;
+    --orange-dark:#e68a00;
+    --bg:#f4f6f8;
+    --card:#ffffff;
+    --text:#1a2430;
+    --muted:#6b7787;
+    --line:#e3e8ee;
+    --green:#0e8a4d;
+    --green-bg:#e8f7ef;
+    --red:#c62828;
+    --red-bg:#fdecec;
+    --amber:#9a6700;
+    --amber-bg:#fff6df;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Meiryo",system-ui,sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.7;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:0 14px;}
+
+  header{
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);
+    color:#fff;padding:28px 0 22px;
+  }
+  header .wrap{display:flex;flex-direction:column;gap:6px;}
+  .badge{
+    display:inline-block;background:var(--orange);color:var(--navy);
+    font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;
+    align-self:flex-start;letter-spacing:.05em;
+  }
+  h1{font-size:22px;font-weight:800;letter-spacing:.02em;}
+  header p{font-size:13px;color:#c8d2dd;}
+
+  /* progress bar */
+  .progress-wrap{
+    position:sticky;top:0;z-index:50;
+    background:var(--card);border-bottom:1px solid var(--line);
+    box-shadow:0 2px 8px rgba(19,26,34,.06);
+  }
+  .progress-inner{
+    max-width:680px;margin:0 auto;padding:10px 14px;
+    display:flex;align-items:center;gap:12px;
+  }
+  .prog-brand{
+    font-size:12.5px;font-weight:800;color:var(--navy2);
+    max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .bar{flex:1;height:10px;background:#e8ecf1;border-radius:999px;overflow:hidden;}
+  .bar > div{
+    height:100%;width:0%;
+    background:linear-gradient(90deg,var(--orange) 0%,#ffb84d 100%);
+    border-radius:999px;transition:width .3s ease;
+  }
+  .pct{font-size:13px;font-weight:700;min-width:88px;text-align:right;color:var(--navy2);}
+
+  main{padding-top:18px;display:flex;flex-direction:column;gap:16px;}
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:18px 16px;box-shadow:0 1px 3px rgba(19,26,34,.04);
+  }
+  .card h2{
+    font-size:16px;font-weight:800;margin-bottom:10px;
+    display:flex;align-items:center;gap:9px;color:var(--navy2);
+  }
+  .stepnum{
+    flex-shrink:0;width:28px;height:28px;border-radius:50%;
+    background:var(--navy2);color:#fff;font-size:14px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .card h2 .stepnum.done{background:var(--green);}
+  .lead{font-size:13px;color:var(--muted);margin-bottom:12px;}
+
+  /* inputs */
+  .field label{font-size:12px;font-weight:700;color:var(--muted);display:block;margin-bottom:4px;}
+  input[type=text]{
+    width:100%;padding:12px 14px;font-size:16px;
+    border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--text);
+    outline:none;transition:border-color .15s;
+  }
+  input[type=text]:focus{border-color:var(--orange);}
+  input[type=text].err-border{border-color:var(--red);}
+  .err{display:none;color:var(--red);font-size:12.5px;font-weight:700;margin-top:6px;}
+  .err.show{display:block;}
+  .btn-row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;}
+  .btn{
+    flex:1;min-width:150px;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+    padding:13px 12px;border:none;border-radius:10px;
+    font-size:14px;font-weight:800;cursor:pointer;
+    text-decoration:none;transition:transform .05s,opacity .15s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .btn:active{transform:scale(.98);}
+  .btn-orange{background:var(--orange);color:var(--navy);}
+  .btn-orange:hover{background:var(--orange-dark);}
+  .btn-navy{background:var(--navy2);color:#fff;}
+  .btn-navy:hover{opacity:.9;}
+  .btn-ghost{background:#eef1f5;color:var(--navy2);}
+
+  /* brand chips */
+  .chips-label{font-size:12px;font-weight:700;color:var(--muted);margin-top:16px;margin-bottom:2px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+  .chip{
+    display:inline-flex;align-items:center;gap:7px;
+    padding:9px 13px;border-radius:999px;
+    background:#eef1f5;border:1.5px solid transparent;
+    font-size:13px;font-weight:700;color:var(--navy2);
+    cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;
+  }
+  .chip.active{background:#fff4e0;border-color:var(--orange);}
+  .chip .prog{font-size:11.5px;color:var(--muted);font-weight:700;}
+  .chip .prog.done{color:var(--green);}
+  .chip .x{
+    margin-left:2px;color:#98a2b3;font-weight:800;font-size:14px;
+    padding:0 3px;border-radius:6px;line-height:1.2;
+  }
+  .chip .x.arm{color:#fff;background:var(--red);}
+  .chip.newbtn{background:#fff;border:1.5px dashed #c4ccd6;color:var(--muted);}
+  .chip.newbtn:hover{border-color:var(--orange);color:var(--navy2);}
+
+  /* checker result */
+  .result{
+    margin-top:12px;padding:12px 14px;border-radius:10px;
+    font-size:14px;font-weight:700;display:none;line-height:1.6;
+  }
+  .result.ok{display:block;background:var(--green-bg);color:var(--green);}
+  .result.warn{display:block;background:var(--amber-bg);color:var(--amber);}
+  .result.ng{display:block;background:var(--red-bg);color:var(--red);}
+  .result small{display:block;font-weight:500;margin-top:4px;font-size:12px;}
+
+  /* callouts */
+  .callout{
+    border-radius:10px;padding:12px 14px;font-size:13px;margin:10px 0;
+    line-height:1.65;
+  }
+  .callout.warn{background:var(--amber-bg);border:1px solid #f0d9a0;color:#6b4e00;}
+  .callout.danger{background:var(--red-bg);border:1px solid #f2c4c4;color:#8c1f1f;}
+  .callout b{font-weight:800;}
+  .callout .ttl{display:flex;gap:6px;font-weight:800;margin-bottom:3px;}
+
+  /* checklist */
+  .checks{display:flex;flex-direction:column;gap:2px;}
+  .check{
+    display:flex;align-items:flex-start;gap:11px;
+    padding:11px 8px;border-radius:10px;cursor:pointer;
+    transition:background .15s;user-select:none;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .check:hover{background:#f6f8fa;}
+  .check input{
+    appearance:none;-webkit-appearance:none;flex-shrink:0;
+    width:24px;height:24px;margin-top:2px;
+    border:2px solid #c4ccd6;border-radius:7px;background:#fff;
+    cursor:pointer;position:relative;transition:all .15s;
+  }
+  .check input:checked{background:var(--green);border-color:var(--green);}
+  .check input:checked::after{
+    content:"";position:absolute;left:7px;top:3px;
+    width:6px;height:11px;border:solid #fff;border-width:0 3px 3px 0;
+    transform:rotate(45deg);
+  }
+  .check span{font-size:14.5px;}
+  .check input:checked + span{color:var(--muted);text-decoration:line-through;text-decoration-color:#c4ccd6;}
+  .check span b{font-weight:800;color:var(--red);}
+  .check input:checked + span b{color:var(--muted);}
+
+  .sub{
+    display:flex;align-items:center;gap:8px;
+    margin:18px 0 8px;padding-left:10px;
+    border-left:4px solid var(--orange);
+    font-size:13.5px;font-weight:800;color:var(--navy2);letter-spacing:.01em;
+  }
+  .sub:first-of-type{margin-top:4px;}
+  .sub .n{
+    font-size:11.5px;font-weight:800;color:var(--muted);
+    font-variant-numeric:tabular-nums;
+  }
+  .howto{font-size:13.5px;color:var(--text);background:#f6f8fa;border-radius:10px;padding:12px 14px;margin-bottom:10px;}
+  .howto ol{padding-left:20px;display:flex;flex-direction:column;gap:3px;}
+
+  .reset-row{text-align:center;margin-top:4px;}
+  .reset-btn{
+    background:none;border:none;color:var(--muted);font-size:12.5px;
+    text-decoration:underline;cursor:pointer;padding:10px;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .reset-btn.arm{
+    color:#fff;background:var(--red);text-decoration:none;
+    border-radius:999px;font-weight:800;padding:10px 18px;
+  }
+
+  .done-banner{
+    display:none;background:var(--green-bg);border:1.5px solid #bfe6d0;
+    border-radius:14px;padding:18px 16px;text-align:center;
+  }
+  .done-banner.show{display:block;}
+  .done-banner .big{font-size:18px;font-weight:800;color:var(--green);margin-bottom:4px;}
+  .done-banner p{font-size:13px;color:var(--text);}
+
+  footer{
+    margin-top:26px;padding:0 14px;
+    text-align:center;font-size:11.5px;color:var(--muted);line-height:1.8;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="badge">動画視聴者限定特典</span>
+    <h1>Amazon出品規制解除ナビ</h1>
+    <p>ヨドバシ.com領収書方式 ─ 動画の3ステップを上から順にこなすだけで申請完了</p>
+  </div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="prog-brand" id="progBrand"></div>
+    <div class="bar"><div id="barFill"></div></div>
+    <div class="pct" id="pctText">0% (0/0)</div>
+  </div>
+</div>
+
+<div class="wrap">
+<main>
+
+  <!-- 完了バナー -->
+  <div class="done-banner" id="doneBanner">
+    <div class="big">🎉 全ステップ完了！</div>
+    <p>あとはAmazonからの審査結果メールを待つだけです。おつかれさまでした！<br>次のブランドは下の」＋ 新しいブランドを始める」からどうぞ。</p>
+  </div>
+
+  <!-- ブランド入力 -->
+  <section class="card">
+    <h2><span class="stepnum" style="background:var(--orange);color:var(--navy)">★</span>解除したいブランド名を入力</h2>
+    <p class="lead">ブランドごとにチェック状態が自動保存されます。何度でも・何ブランドでも使えます。</p>
+    <div class="field">
+      <label>ブランド名（例: ビオレ）</label>
+      <input type="text" id="brandInput" placeholder="ブランド名を入力" autocomplete="off">
+      <div class="err" id="brandErr">※ 先にブランド名を入力してください</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-orange" onclick="openYodobashi()">🔍 ヨドバシで探す</button>
+      <button class="btn btn-navy" onclick="openAmazon()">🛒 Amazonで確認</button>
+    </div>
+    <div class="btn-row">
+      <a class="btn btn-ghost" href="https://sellercentral.amazon.co.jp/" target="_blank" rel="noopener">⚙️ セラーセントラルを開く</a>
+    </div>
+    <div class="chips-label" id="chipsLabel" style="display:none">ブランド一覧（タップで切り替え／✕を2回タップで削除）</div>
+    <div class="chips" id="chips"></div>
+  </section>
+
+  <!-- ブランド名一致チェッカー -->
+  <section class="card">
+    <h2><span class="stepnum" style="background:var(--red)">!</span>ブランド名一致チェッカー</h2>
+    <p class="lead">動画で解説した最重要ポイント。買う前に、Amazon商品ページの「ブランド」欄の表記をここに貼って一致を確認！</p>
+    <div class="field" style="margin-bottom:10px">
+      <label>解除を申請したいブランド名</label>
+      <input type="text" id="checkA" placeholder="例: ビオレ" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>買おうとしている商品のAmazonページの「ブランド」欄の表記</label>
+      <input type="text" id="checkB" placeholder="例: 花王" autocomplete="off">
+    </div>
+    <div class="result" id="checkResult"></div>
+    <div class="callout warn">
+      <div class="ttl">⚠️ なぜ重要？</div>
+      同じメーカーの商品でも、商品ごとにブランド登録名が違います。たとえばビオレの商品なのに「花王」でブランド登録されている商品を10点買っても、解除されるのは「花王」だけ。<b>「ビオレ」の規制は解除できず、購入代金がムダになります。</b>
+    </div>
+  </section>
+
+  <!-- STEP 1 -->
+  <section class="card" data-step>
+    <h2><span class="stepnum">1</span>出品規制がかかっているかの確認</h2>
+    <div class="checks">
+      <label class="check"><input type="checkbox" data-key="s1a"><span>セラーセントラルで出品したい商品のASINを検索し、「出品を申請」で規制がかかっていることを確認した</span></label>
+      <label class="check"><input type="checkbox" data-key="s1b"><span>申請画面に「ブランド名: ◯◯ のブランド登録済みの出品を申請します」と表示され、<b>解除したいブランド名と一致</b>している</span></label>
+    </div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="card" data-step>
+    <h2><span class="stepnum">2</span>ヨドバシ.comで領収書を用意する</h2>
+    <p class="lead">動画で一番失敗が多いのがこのステップです。商品選び → 10点購入 → 領収書発行、の順にこなしてください。</p>
+
+    <div class="sub"><span class="n">2-1</span>購入する商品を探す</div>
+    <div class="howto">
+      <ol>
+        <li>上の「ヨドバシで探す」ボタンで検索</li>
+        <li>「価格の安い順」に並べ替え</li>
+        <li>安い商品の商品名をコピーして、Amazonで検索</li>
+      </ol>
+    </div>
+    <div class="checks">
+      <label class="check"><input type="checkbox" data-key="s2a"><span>ヨドバシの検索結果を「価格の安い順」に並べ替えて、安い商品から候補を選んだ</span></label>
+      <label class="check"><input type="checkbox" data-key="s2b"><span>その商品がAmazonにも存在することを商品名検索で確認した（<b>セット品・大容量ではなく単品</b>。容量・サイズまで同じ同一商品であること）</span></label>
+      <label class="check"><input type="checkbox" data-key="s2c"><span>Amazonページの「ブランド」欄が解除したいブランド名と<b>完全一致</b>している（上のチェッカーで確認）</span></label>
+    </div>
+
+    <div class="sub"><span class="n">2-2</span>ヨドバシで10点以上購入する</div>
+    <div class="checks">
+      <label class="check"><input type="checkbox" data-key="s3a"><span>数量を<b>10点以上</b>にしてショッピングカートに入れた</span></label>
+      <label class="check"><input type="checkbox" data-key="s3b"><span>お届け先住所が<b>セラーセントラルに登録している住所と同一</b>であることを確認した（ここが違うと審査に通りません）</span></label>
+      <label class="check"><input type="checkbox" data-key="s3c"><span>「PDF以外の領収書の希望」はチェック不要（領収書は後から電子発行できる）と理解した</span></label>
+      <label class="check"><input type="checkbox" data-key="s3d"><span>注文内容を確認して注文を確定した</span></label>
+    </div>
+
+    <div class="sub"><span class="n">2-3</span>領収書をPDFで発行する</div>
+    <p class="lead">商品到着後、ヨドバシの注文履歴から発行できます。</p>
+    <div class="checks">
+      <label class="check"><input type="checkbox" data-key="s4a"><span>注文履歴 →「領収書・お買い上げ票」ボタンをクリックした</span></label>
+      <label class="check"><input type="checkbox" data-key="s4b"><span>宛名に<b>セラーセントラルのショップ名＋担当者として登録している名前</b>を入力した</span></label>
+      <label class="check"><input type="checkbox" data-key="s4c"><span>チェックボックスにチェックを入れ「領収書ダウンロード」でPDFを保存した</span></label>
+      <label class="check"><input type="checkbox" data-key="s4d"><span>PDFの記載を確認した: ショップ名／担当者名／商品名／JANコード／数量（10点以上）／お届け先住所＝セラーセントラル登録住所</span></label>
+    </div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="card" data-step>
+    <h2><span class="stepnum">3</span>セラーセントラルで出品許可を申請する</h2>
+    <div class="checks">
+      <label class="check"><input type="checkbox" data-key="s5a"><span>出品申請の画面に戻り、確認項目に上から順にチェックを入れた（180日以内の領収書／出品アカウント情報と一致／メーカー・販売業者名の記載）</span></label>
+      <label class="check"><input type="checkbox" data-key="s5b"><span>「ファイルの選択」から領収書PDFを添付した</span></label>
+      <label class="check"><input type="checkbox" data-key="s5c"><span>メールアドレスはセラーセントラル登録のものを入力した（電話番号は任意なので空欄でOK）</span></label>
+      <label class="check"><input type="checkbox" data-key="s5d"><span>送信ボタンを押して申請を完了した</span></label>
+    </div>
+    <div class="callout danger">
+      <div class="ttl">📌 領収書の有効期限に注意</div>
+      領収書は<b>発行から180日以内</b>のものだけ有効です。購入したら早めに申請まで済ませてしまいましょう。
+    </div>
+  </section>
+
+  <div class="reset-row">
+    <button class="reset-btn" id="resetBtn">このブランドのチェックをリセット</button>
+  </div>
+
+</main>
+</div>
+
+<footer>
+  本ツールはチェックリスト＆リンク集です。サイトの自動操作・情報取得は一切行いません。<br>
+  入力内容はお使いの端末（ブラウザ）内にのみ保存され、外部には送信されません。
+</footer>
+
+<script>
+(function(){
+  var LS_KEY = "kaijoNavi_v2";
+  var LS_OLD = "kaijoNavi_v1";
+
+  function $(id){ return document.getElementById(id); }
+  var brandInput = $("brandInput");
+  var checkA = $("checkA");
+  var checkB = $("checkB");
+  var boxes = Array.prototype.slice.call(document.querySelectorAll(".check input[type=checkbox]"));
+  var TOTAL = boxes.length;
+
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];
+    });
+  }
+
+  /* ---- 状態 ----
+     state.currentBrand : 今開いているブランド名（未入力なら ""）
+     state.current      : 今開いているセッション {a,b,checks}
+     state.sessions     : 他ブランドの保存分 { name: {a,b,checks} }        */
+  var state = { currentBrand: "", current: {a:"",b:"",checks:{}}, sessions: {} };
+
+  function collect(){
+    var s = { a: checkA.value, b: checkB.value, checks: {} };
+    boxes.forEach(function(b){ s.checks[b.dataset.key] = b.checked; });
+    return s;
+  }
+  function persist(){
+    state.current = collect();
+    try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){}
+  }
+  function countDone(s){
+    var n = 0;
+    boxes.forEach(function(b){ if(s.checks && s.checks[b.dataset.key]) n++; });
+    return n;
+  }
+
+  function applySession(s){
+    checkA.value = s.a || "";
+    checkB.value = s.b || "";
+    boxes.forEach(function(b){ b.checked = !!(s.checks && s.checks[b.dataset.key]); });
+    judge(); updateProgress();
+  }
+
+  /* ---- ブランド切り替え ---- */
+  function switchTo(name){
+    if(state.currentBrand){ state.sessions[state.currentBrand] = collect(); }
+    var s = state.sessions[name] || {a:"",b:"",checks:{}};
+    delete state.sessions[name];
+    state.currentBrand = name;
+    brandInput.value = name;
+    applySession(s);
+    persist(); renderChips();
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+  function newBrand(){
+    if(state.currentBrand){ state.sessions[state.currentBrand] = collect(); }
+    state.currentBrand = "";
+    brandInput.value = "";
+    applySession({a:"",b:"",checks:{}});
+    persist(); renderChips();
+    brandInput.focus();
+  }
+
+  /* ---- チップ描画 ---- */
+  var armedChip = null, armTimer = null;
+  function disarm(){
+    armedChip = null;
+    if(armTimer){ clearTimeout(armTimer); armTimer = null; }
+  }
+  function renderChips(){
+    var box = $("chips");
+    box.innerHTML = "";
+    var names = Object.keys(state.sessions);
+    var hasAny = names.length > 0 || !!state.currentBrand;
+    $("chipsLabel").style.display = hasAny ? "block" : "none";
+
+    function makeChip(name, sess, isActive){
+      var chip = document.createElement("div");
+      chip.className = "chip" + (isActive ? " active" : "");
+      var done = countDone(sess);
+      var progHtml = (done === TOTAL)
+        ? '<span class="prog done">✓ 完了</span>'
+        : '<span class="prog">' + done + "/" + TOTAL + "</span>";
+      chip.innerHTML = esc(name) + " " + progHtml + ' <span class="x">✕</span>';
+      if(!isActive){
+        chip.addEventListener("click", function(){ disarm(); switchTo(name); });
+      }
+      var x = chip.querySelector(".x");
+      x.addEventListener("click", function(ev){
+        ev.stopPropagation();
+        var id = (isActive ? "@active" : name);
+        if(armedChip === id){
+          disarm();
+          if(isActive){
+            state.currentBrand = "";
+            brandInput.value = "";
+            applySession({a:"",b:"",checks:{}});
+          }else{
+            delete state.sessions[name];
+          }
+          persist(); renderChips();
+        }else{
+          disarm();
+          armedChip = id;
+          x.classList.add("arm");
+          armTimer = setTimeout(function(){ disarm(); renderChips(); }, 3000);
+        }
+      });
+      return chip;
+    }
+
+    if(state.currentBrand){
+      box.appendChild(makeChip(state.currentBrand, collect(), true));
+    }
+    names.sort().forEach(function(n){
+      box.appendChild(makeChip(n, state.sessions[n], false));
+    });
+
+    var add = document.createElement("div");
+    add.className = "chip newbtn";
+    add.textContent = "＋ 新しいブランドを始める";
+    add.addEventListener("click", function(){ disarm(); newBrand(); });
+    box.appendChild(add);
+  }
+
+  /* ---- ブランド名入力の確定（rename / switch） ---- */
+  brandInput.addEventListener("change", function(){
+    var v = brandInput.value.trim();
+    brandInput.value = v;
+    if(v === state.currentBrand){ persist(); renderChips(); return; }
+    if(state.currentBrand === ""){
+      if(state.sessions[v] !== undefined){
+        switchTo(v);                       // 保存済みブランドを開く
+      }else{
+        state.currentBrand = v;            // 今のチェックのままブランド名を付ける
+        persist(); renderChips();
+      }
+    }else{
+      if(v === ""){
+        state.currentBrand = "";           // 名前だけ外す（チェックは維持）
+        persist(); renderChips();
+      }else{
+        var old = state.currentBrand;      // 別ブランドへ切り替え
+        state.sessions[old] = collect();
+        var s = state.sessions[v] || {a:"",b:"",checks:{}};
+        delete state.sessions[v];
+        state.currentBrand = v;
+        applySession(s);
+        persist(); renderChips();
+      }
+    }
+  });
+
+  /* ---- 進捗 ---- */
+  function updateProgress(){
+    var done = boxes.filter(function(b){ return b.checked; }).length;
+    var pct = TOTAL ? Math.round(done/TOTAL*100) : 0;
+    $("barFill").style.width = pct + "%";
+    $("pctText").textContent = pct + "% (" + done + "/" + TOTAL + ")";
+    $("progBrand").textContent = state.currentBrand || "";
+    $("doneBanner").className = "done-banner" + (done === TOTAL && TOTAL > 0 ? " show" : "");
+
+    document.querySelectorAll("[data-step]").forEach(function(card){
+      var cbs = Array.prototype.slice.call(card.querySelectorAll("input[type=checkbox]"));
+      var allDone = cbs.length > 0 && cbs.every(function(c){ return c.checked; });
+      var num = card.querySelector(".stepnum");
+      if(allDone){ num.classList.add("done"); num.textContent = "✓"; }
+      else{ num.classList.remove("done"); num.textContent = num.dataset.orig; }
+    });
+  }
+  document.querySelectorAll("[data-step] .stepnum").forEach(function(n){ n.dataset.orig = n.textContent; });
+
+  /* ---- 検索ボタン ---- */
+  function needBrand(){
+    var v = brandInput.value.trim();
+    if(!v){
+      $("brandErr").classList.add("show");
+      brandInput.classList.add("err-border");
+      brandInput.focus();
+      return null;
+    }
+    return v;
+  }
+  brandInput.addEventListener("input", function(){
+    $("brandErr").classList.remove("show");
+    brandInput.classList.remove("err-border");
+  });
+  window.openYodobashi = function(){
+    var v = needBrand(); if(v === null) return;
+    window.open("https://www.yodobashi.com/?word=" + encodeURIComponent(v), "_blank");
+  };
+  window.openAmazon = function(){
+    var v = needBrand(); if(v === null) return;
+    window.open("https://www.amazon.co.jp/s?k=" + encodeURIComponent(v), "_blank");
+  };
+
+  /* ---- ブランド名一致チェッカー ---- */
+  function norm(s){
+    var t = s;
+    try{ t = t.normalize("NFKC"); }catch(e){}
+    return t.toLowerCase().replace(/[\s　]+/g,"").replace(/[ー\-‐−–—]/g,"");
+  }
+  function judge(){
+    var a = checkA.value.trim(), b = checkB.value.trim();
+    var el = $("checkResult");
+    if(!a || !b){ el.className = "result"; el.textContent = ""; return; }
+    var na = norm(a), nb = norm(b);
+    if(na === nb){
+      el.className = "result ok";
+      el.innerHTML = "✅ 一致！ この商品でOKです<small>「" + esc(a) + "」のブランド登録商品なので、購入すれば「" + esc(a) + "」の解除申請に使えます。</small>";
+    }else if(na.indexOf(nb) !== -1 || nb.indexOf(na) !== -1){
+      el.className = "result warn";
+      el.innerHTML = "⚠️ 似ていますが完全一致ではありません<small>表記ゆれの可能性もありますが、念のためセラーセントラルの申請画面に表示されるブランド名と同じ表記か確認してから購入してください。</small>";
+    }else{
+      el.className = "result ng";
+      el.innerHTML = "❌ 不一致！ この商品を買っても「" + esc(a) + "」は解除できません<small>この商品は「" + esc(b) + "」でブランド登録されています。10点購入しても解除されるのは「" + esc(b) + "」の方です。別の商品を探しましょう。</small>";
+    }
+  }
+
+  /* ---- リセット（2回タップ方式・ダイアログ不使用） ---- */
+  var resetArmed = false, resetTimer = null;
+  var resetBtn = $("resetBtn");
+  resetBtn.addEventListener("click", function(){
+    if(resetArmed){
+      resetArmed = false;
+      if(resetTimer){ clearTimeout(resetTimer); resetTimer = null; }
+      resetBtn.className = "reset-btn";
+      resetBtn.textContent = "このブランドのチェックをリセット";
+      boxes.forEach(function(b){ b.checked = false; });
+      checkA.value = ""; checkB.value = "";
+      judge(); persist(); updateProgress(); renderChips();
+      window.scrollTo({top:0, behavior:"smooth"});
+    }else{
+      resetArmed = true;
+      resetBtn.className = "reset-btn arm";
+      resetBtn.textContent = "もう一度タップでリセット実行";
+      resetTimer = setTimeout(function(){
+        resetArmed = false;
+        resetBtn.className = "reset-btn";
+        resetBtn.textContent = "このブランドのチェックをリセット";
+      }, 3000);
+    }
+  });
+
+  /* ---- 保存・復元 ---- */
+  function load(){
+    var raw = null;
+    try{ raw = localStorage.getItem(LS_KEY); }catch(e){}
+    if(raw){
+      try{
+        var s = JSON.parse(raw);
+        state.currentBrand = s.currentBrand || "";
+        state.current = s.current || {a:"",b:"",checks:{}};
+        state.sessions = s.sessions || {};
+      }catch(e){}
+    }else{
+      /* 旧バージョンからの引き継ぎ */
+      try{
+        var old = localStorage.getItem(LS_OLD);
+        if(old){
+          var o = JSON.parse(old);
+          state.currentBrand = (o.brand || "").trim();
+          state.current = { a: o.a || "", b: o.b || "", checks: o.checks || {} };
+          localStorage.removeItem(LS_OLD);
+        }
+      }catch(e){}
+    }
+    brandInput.value = state.currentBrand;
+    applySession(state.current);
+  }
+
+  /* ---- イベント ---- */
+  boxes.forEach(function(b){
+    b.addEventListener("change", function(){ persist(); updateProgress(); renderChips(); });
+  });
+  [checkA, checkB].forEach(function(inp){
+    inp.addEventListener("input", function(){ persist(); judge(); });
+  });
+
+  load(); renderChips(); updateProgress();
+})();
+</script>
+</body>
+</html>
