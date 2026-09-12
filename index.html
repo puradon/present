@@ -9,6 +9,7 @@
   --bg:#f3f5f8;--surface:#ffffff;--surface-2:#eef2f7;--ink:#1a2130;--ink-2:#3f4a5a;--muted:#77808f;--line:#e2e7ee;
   --primary:#1f4e8c;--primary-hover:#173e70;--primary-ink:#ffffff;--primary-soft:#e6eef9;
   --accent:#e9a23b;--accent-soft:#fff3df;--ok:#1f9d61;--ok-soft:#e4f5ec;
+  --cta:#d1382f;--cta-hover:#b32e26;--cta-ink:#ffffff;
   --appbar:#111a2b;--appbar-ink:#ffffff;--img-bg:#e9edf3;--shadow:0 1px 2px rgba(16,24,40,.06),0 6px 18px -8px rgba(16,24,40,.18);
   --font-body:"Noto Sans JP","Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI",Meiryo,system-ui,sans-serif;
   --font-head:"Zen Kaku Gothic New","Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic UI",Meiryo,system-ui,sans-serif;
@@ -19,6 +20,7 @@
     --bg:#0f141c;--surface:#171e2a;--surface-2:#1f2836;--ink:#e9eef5;--ink-2:#c5cdd8;--muted:#8d97a7;--line:#2a3443;
     --primary:#7fb3ff;--primary-hover:#9cc5ff;--primary-ink:#0b1424;--primary-soft:#1c2c47;
     --accent:#f0b35a;--accent-soft:#3a2c14;--ok:#4fca8c;--ok-soft:#153426;
+    --cta:#e5564b;--cta-hover:#ef7469;--cta-ink:#1a0605;
     --appbar:#0a0f17;--appbar-ink:#f2f5f9;--img-bg:#222b38;--shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -10px rgba(0,0,0,.6);
   }
 }
@@ -26,6 +28,7 @@
   --bg:#0f141c;--surface:#171e2a;--surface-2:#1f2836;--ink:#e9eef5;--ink-2:#c5cdd8;--muted:#8d97a7;--line:#2a3443;
   --primary:#7fb3ff;--primary-hover:#9cc5ff;--primary-ink:#0b1424;--primary-soft:#1c2c47;
   --accent:#f0b35a;--accent-soft:#3a2c14;--ok:#4fca8c;--ok-soft:#153426;
+  --cta:#e5564b;--cta-hover:#ef7469;--cta-ink:#1a0605;
   --appbar:#0a0f17;--appbar-ink:#f2f5f9;--img-bg:#222b38;--shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -10px rgba(0,0,0,.6);
 }
 *,*::before,*::after{box-sizing:border-box}
@@ -116,6 +119,8 @@ h2{font-size:1.1rem;font-weight:700}
 .btn:hover{background:var(--primary-hover);color:var(--primary-ink);text-decoration:none;transform:translateY(-1px)}
 .btn.ghost{background:var(--surface);color:var(--primary);border:1.5px solid var(--primary)}
 .btn.ghost:hover{background:var(--primary-soft)}
+.btn.cta{background:var(--cta);color:var(--cta-ink)}
+.btn.cta:hover{background:var(--cta-hover);color:var(--cta-ink)}
 .btn-row{display:flex;justify-content:center;margin:1.4em 0}
 .video-card{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin:1.4em 0;color:var(--ink);box-shadow:var(--shadow)}
 .video-card:hover{text-decoration:none;border-color:var(--primary)}
@@ -204,7 +209,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
         case 'html':return b.html||'';
         case 'image':return '<figure>'+imgTag(b.src,b.alt)+(b.caption?'<figcaption>'+esc(b.caption)+'</figcaption>':'')+'</figure>';
         case 'images':return '<div class="seq" style="max-width:'+(parseInt(b.max_width,10)||760)+'px">'+(b.src||[]).map(function(s,i){return imgTag(s,(b.alt||'')+' '+(i+1))}).join('')+'</div>';
-        case 'button':return '<div class="btn-row"><a class="btn" href="'+esc(b.url)+'" target="_blank" rel="noopener">'+esc(b.label||'こちらをクリック')+' '+ICON.arrowRight+'</a></div>';
+        case 'button':return '<div class="btn-row"><a class="btn cta" href="'+esc(b.url)+'" target="_blank" rel="noopener">'+esc(b.label||'こちらをクリック')+' '+ICON.arrowRight+'</a></div>';
         case 'video':
           if(b.embed)return '<div class="video-embed"><iframe src="'+esc(videoUrl(b.url))+'" title="'+esc(b.title||'動画')+'" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><p style="text-align:center"><a href="'+esc(b.url)+'" target="_blank" rel="noopener">動画が表示されない場合はこちら</a></p>';
           return '<a class="video-card" href="'+esc(b.url)+'" target="_blank" rel="noopener"><span class="play">'+ICON.play+'</span><span><strong>'+esc(b.title||'動画を見る')+'</strong><small>'+esc(b.url)+'</small></span></a>';
